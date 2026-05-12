@@ -160,7 +160,7 @@ curl http://127.0.0.1:8990/v1/messages \
 docker compose up -d
 ```
 
-`docker-compose.yml` 默认使用阿里云镜像，并将仓库根目录的 `config.example.json` 挂载为容器内的 `/app/config/config.json`。凭据文件会保存在 `kiro-rs-data` 数据卷中的 `/app/data/credentials.json`；启动后可通过 Admin API 或 Admin UI 添加凭据。
+`docker-compose.yml` 默认使用阿里云镜像。镜像内置默认配置，首次启动会自动写入 `kiro-rs-config` 数据卷中的 `/app/config/config.json`；凭据文件会保存在 `kiro-rs-data` 数据卷中的 `/app/data/credentials.json`。Compose 默认固定客户端密钥为 `sk-kiro-rs-861bd136e5414639b33ee173184e3b6c`，Admin 密钥为 `frogapi123`；也可以通过 `API_KEY` / `ADMIN_API_KEY` 环境变量覆盖。启动后可通过 Admin API 或 Admin UI 导入 Kiro 账号凭据。
 
 ## 配置详解
 

@@ -7,12 +7,15 @@ services:
     environment:
       CONFIG_FILE: /app/config/config.json
       CREDENTIALS_FILE: /app/data/credentials.json
+      API_KEY: ${API_KEY:-sk-kiro-rs-861bd136e5414639b33ee173184e3b6c}
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-frogapi123}
     ports:
       - "8990:8990"
     volumes:
-      - ./config.example.json:/app/config/config.json:ro
+      - kiro-rs-config:/app/config
       - kiro-rs-data:/app/data
     restart: unless-stopped
 
 volumes:
+  kiro-rs-config:
   kiro-rs-data:

@@ -48,6 +48,7 @@ RUN apk add --no-cache ca-certificates jq
 
 WORKDIR /app
 COPY --from=builder /app/target/release/kiro-rs /app/kiro-rs
+COPY config.example.json /app/default-config.json
 COPY docker-entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
