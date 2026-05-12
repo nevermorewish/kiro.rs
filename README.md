@@ -503,7 +503,6 @@ kiro-rs/
 ├── admin-ui/                   # Admin UI 前端工程（构建产物会嵌入二进制）
 ├── tools/                      # 辅助工具
 ├── Cargo.toml                  # 项目配置
-├── config.example.json         # 配置示例
 ├── docker-compose.yml          # Docker Compose 配置
 └── Dockerfile                  # Docker 构建文件
 ```
