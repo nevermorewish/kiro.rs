@@ -50,20 +50,7 @@ COPY docker-entrypoint.sh /app/entrypoint.sh
 RUN jq -n \
       --arg apiKey "sk-kiro-rs-861bd136e5414639b33ee173184e3b6c" \
       --arg adminApiKey "frogapi123" \
-      '{
-        host: "0.0.0.0",
-        port: 8990,
-        apiKey: $apiKey,
-        adminApiKey: $adminApiKey,
-        tlsBackend: "rustls",
-        defaultEndpoint: "ide",
-        region: "us-east-1",
-        promptCacheTtlSeconds: 300,
-        promptCacheAccountingEnabled: true,
-        compression: {
-          maxRequestBodyBytes: 4718592
-        }
-      }' > /app/default-config.json \
+      '{host:"0.0.0.0",port:8990,apiKey:$apiKey,adminApiKey:$adminApiKey,tlsBackend:"rustls",defaultEndpoint:"ide",region:"us-east-1",promptCacheTtlSeconds:300,promptCacheAccountingEnabled:true,compression:{maxRequestBodyBytes:4718592}}' > /app/default-config.json \
     && chmod +x /app/entrypoint.sh
 
 VOLUME ["/app/config"]
