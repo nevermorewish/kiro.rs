@@ -1,4 +1,6 @@
-FROM rust:1.93-alpine AS chef
+ARG BASE_REGISTRY=registry.cn-hangzhou.aliyuncs.com
+
+FROM ${BASE_REGISTRY}/library/rust:1.93-alpine AS chef
 RUN apk add --no-cache musl-dev openssl-dev openssl-libs-static
 RUN cargo install cargo-chef
 WORKDIR /app
@@ -8,7 +10,7 @@ COPY Cargo.toml Cargo.lock* ./
 COPY src ./src
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM node:24-alpine AS frontend-builder
+FROM ${BASE_REGISTRY}/library/node:24-alpine AS frontend-builder
 WORKDIR /app/admin-ui
 COPY admin-ui/package.json ./
 # pnpm 10.x 会把 ignored build scripts 当作错误（ERR_PNPM_IGNORED_BUILDS）。
@@ -40,7 +42,7 @@ RUN if [ "$ENABLE_SENSITIVE_LOGS" = "true" ]; then \
         cargo build --release; \
     fi
 
-FROM alpine:3.21
+FROM ${BASE_REGISTRY}/library/alpine:3.21
 
 RUN apk add --no-cache ca-certificates jq
 
