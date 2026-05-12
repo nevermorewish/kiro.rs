@@ -342,6 +342,21 @@ impl Config {
         Ok(config)
     }
 
+    pub fn validate_for_startup(&self) -> anyhow::Result<()> {
+        match self.api_key.as_deref().map(str::trim) {
+            Some(api_key) if !api_key.is_empty() => {}
+            _ => anyhow::bail!("config apiKey is required and cannot be empty"),
+        }
+
+        if let Some(admin_api_key) = self.admin_api_key.as_deref()
+            && admin_api_key.trim().is_empty()
+        {
+            anyhow::bail!("config adminApiKey cannot be an empty string; remove it or set a value");
+        }
+
+        Ok(())
+    }
+
     /// 获取配置文件路径（如果有）
     #[allow(dead_code)]
     pub fn config_path(&self) -> Option<&Path> {
@@ -378,5 +393,36 @@ mod tests {
         let config: Config = serde_json::from_str(r#"{"promptCacheAccountingEnabled":false}"#)
             .expect("config should deserialize");
         assert!(!config.prompt_cache_accounting_enabled);
+    }
+
+    #[test]
+    fn test_validate_for_startup_rejects_missing_api_key() {
+        let config = Config::default();
+        let err = config.validate_for_startup().unwrap_err().to_string();
+        assert!(err.contains("apiKey"));
+    }
+
+    #[test]
+    fn test_validate_for_startup_rejects_empty_api_key() {
+        let mut config = Config::default();
+        config.api_key = Some("   ".to_string());
+        let err = config.validate_for_startup().unwrap_err().to_string();
+        assert!(err.contains("apiKey"));
+    }
+
+    #[test]
+    fn test_validate_for_startup_rejects_empty_admin_api_key() {
+        let mut config = Config::default();
+        config.api_key = Some("sk-test".to_string());
+        config.admin_api_key = Some("   ".to_string());
+        let err = config.validate_for_startup().unwrap_err().to_string();
+        assert!(err.contains("adminApiKey"));
+    }
+
+    #[test]
+    fn test_validate_for_startup_accepts_api_key_without_admin_api_key() {
+        let mut config = Config::default();
+        config.api_key = Some("sk-test".to_string());
+        assert!(config.validate_for_startup().is_ok());
     }
 }

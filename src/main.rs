@@ -41,6 +41,10 @@ async fn main() {
         tracing::error!("加载配置失败: {}", e);
         std::process::exit(1);
     });
+    config.validate_for_startup().unwrap_or_else(|e| {
+        tracing::error!("invalid config: {}", e);
+        std::process::exit(1);
+    });
     let config = Arc::new(RwLock::new(config));
 
     // 加载凭证（支持单对象或数组格式）

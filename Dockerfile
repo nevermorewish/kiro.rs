@@ -42,13 +42,15 @@ RUN if [ "$ENABLE_SENSITIVE_LOGS" = "true" ]; then \
 
 FROM alpine:3.21
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates jq
 
 WORKDIR /app
 COPY --from=builder /app/target/release/kiro-rs /app/kiro-rs
+COPY docker-entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 VOLUME ["/app/config"]
 
 EXPOSE 8990
 
-CMD ["./kiro-rs", "-c", "/app/config/config.json", "--credentials", "/app/config/credentials.json"]
+ENTRYPOINT ["/app/entrypoint.sh"]
