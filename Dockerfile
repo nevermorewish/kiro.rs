@@ -42,7 +42,7 @@ RUN if [ "$ENABLE_SENSITIVE_LOGS" = "true" ]; then \
         cargo build --release; \
     fi
 
-FROM ${BASE_REGISTRY}/library/alpine:3.21
+FROM chef AS runtime
 
 RUN apk add --no-cache ca-certificates jq
 
