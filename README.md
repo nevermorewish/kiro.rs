@@ -154,13 +154,13 @@ curl http://127.0.0.1:8990/v1/messages \
 
 ### Docker
 
-也可以通过 Docker 启动：
+也可以通过 Docker Compose 一键启动：
 
 ```bash
-docker-compose up
+docker compose up -d
 ```
 
-需要将 `config.json` 和 `credentials.json` 挂载到容器中，具体参见 `docker-compose.yml`。
+`docker-compose.yml` 默认使用阿里云镜像，并将仓库根目录的 `config.example.json` 挂载为容器内的 `/app/config/config.json`。凭据文件会保存在 `kiro-rs-data` 数据卷中的 `/app/data/credentials.json`；启动后可通过 Admin API 或 Admin UI 添加凭据。
 
 ## 配置详解
 

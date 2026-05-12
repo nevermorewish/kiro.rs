@@ -1,13 +1,18 @@
 services:
   kiro-rs:
-    # 使用国内镜像
-    # image: ghcr.nju.edu.cn/${IMAGE_OWNER:-hank9999}/kiro-rs:${IMAGE_TAG:-latest}
-    image: ghcr.io/${IMAGE_OWNER:-hank9999}/kiro-rs:${IMAGE_TAG:-latest}
+    image: crpi-dzjyl2rfnlfugj1m.cn-shanghai.personal.cr.aliyuncs.com/frogclaw/kirors:latest
     container_name: kiro-rs
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    environment:
+      CONFIG_FILE: /app/config/config.json
+      CREDENTIALS_FILE: /app/data/credentials.json
     ports:
       - "8990:8990"
     volumes:
-      - ./config/:/app/config/
+      - ./config.example.json:/app/config/config.json:ro
+      - kiro-rs-data:/app/data
     restart: unless-stopped
+
+volumes:
+  kiro-rs-data:
